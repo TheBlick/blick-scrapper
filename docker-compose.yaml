@@ -1,0 +1,27 @@
+x-common:
+  &common-env
+  environment:
+    POSTGRES_USER:      ${PG_USER}
+    POSTGRES_PASSWORD:  ${PG_PASS}
+    POSTGRES_DB:        job_postings
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - "1234:5432"
+    restart: on-failure
+    volumes:
+      - "./db_init:/docker-entrypoint-initdb.d"
+    <<: *common-env
+
+  python-env:
+    build:
+      context: .
+      dockerfile: python.Dockerfile
+    container_name: python-env
+    volumes:
+      - "./src:/app"
+    <<: *common-env
