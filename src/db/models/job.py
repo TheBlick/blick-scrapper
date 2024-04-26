@@ -11,12 +11,13 @@ class Job(Base):
     __tablename__   = 'jobs'
     __table_args__  = {"schema": "landing", "extend_existing": True}
 
-    url             = Column(String(length=255))
-    category        = Column(String, default='job_posting')
-    match           = Column(Enum(JobMatch, schema='landing'))
+    job_id          = Column(BigInteger, primary_key=True)
     target_name     = Column(String(length=255), primary_key=True)
     company_name    = Column(String(length=255), primary_key=True)
-    job_id          = Column(BigInteger, primary_key=True)
+    url             = Column(String(length=255))
+    origin_url      = Column(String(length=255))
+    category        = Column(String, default='job_posting')
+    match           = Column(Enum(JobMatch, schema='landing'))   
     scraped_at      = Column(DateTime(timezone=True), server_default=func.now())
     processed_at    = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
     status          = Column(String)
