@@ -20,3 +20,6 @@ class Job(Base):
     scraped_at      = Column(DateTime(timezone=True), server_default=func.now())
     processed_at    = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
     status          = Column(String)
+
+    def __repr__(self):
+        return f"Job(url={self.url}, category={self.category}, match={self.match}, target_name={self.target_name}, company_name={self.company_name}, job_id={self.job_id}, scraped_at={self.scraped_at}, processed_at={self.processed_at}, status={self.status})"
