@@ -7,3 +7,6 @@ py:
 	docker-compose logs -f python-env
 env:
 	docker-compose run --rm -i --entrypoint bash python-env
+
+test:
+	PYTHONPATH=$(PWD)/src:$${PYTHONPATH} pytest -v -s
