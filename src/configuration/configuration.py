@@ -36,5 +36,4 @@ class ConfigurationHelper:
         """
         Database URI to be used in SQLAlchemy.
         """
-        # self.logger.info(f"postgresql+psycopg2://{self.__db_username}:{self.__db_password}@{self.__db_host}:{self.__db_port}/{self.__db_name}")
         return f"postgresql+psycopg2://{self.__db_username}:{self.__db_password}@{self.__db_host}:{self.__db_port}/{self.__db_name}"
