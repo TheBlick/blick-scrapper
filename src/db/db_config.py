@@ -1,14 +1,16 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects.postgresql import insert
 
 Base = declarative_base()
 
 class DatabaseInteractor:
     def __init__(self, logger, db_url):
         self.__logger = logger
-        self.engine = create_engine(db_url, echo=True)
-        self.Session = sessionmaker(bind=self.engine)
+        self.__engine = create_engine(db_url, echo=True)
+        self.__Session = sessionmaker(bind=self.__engine)
+        self.__session = self.__Session()
 
     @classmethod
     def psql_conn_string(self, host, username, password, port, db_name):
@@ -16,8 +18,8 @@ class DatabaseInteractor:
         return conn_string
     
     def create_tables(self):
-        self.__logger("creating all tables")
-        Base.metadata.create_all(self.engine)
+        # self.__logger("creating all tables")
+        Base.metadata.create_all(self.__engine)
 
     def __execute_stmt(self, stmt):
         data = self.__session.execute(stmt)
@@ -33,14 +35,14 @@ class DatabaseInteractor:
         primary_keys = self.__get_primary_keys(table)
         insert_stmt = insert(table).values(values_to_insert)
 
-        if conflict_mode = 'upsert':
+        if conflict_mode == 'upsert':
             conflict_stmt = insert_stmt.on_conflict_do_update(
                 index_elements=primary_keys,
                 set_={col: getattr(insert_stmt.excluded, col) for col in values_to_insert[0]}
                 # grabbing the schema from the first value: this demands that we declare null values explicitly
             )
 
-        elif conflict_mode = 'do_nothing':
+        elif conflict_mode == 'do_nothing':
             conflict_stmt = insert_stmt.on_conflict_do_nothing(index_elements=primary_keys)
 
         else:
