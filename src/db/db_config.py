@@ -11,14 +11,9 @@ class DatabaseInteractor:
         self.__engine = create_engine(db_url, echo=True)
         self.__Session = sessionmaker(bind=self.__engine)
         self.__session = self.__Session()
-
-    @classmethod
-    def psql_conn_string(self, host, username, password, port, db_name):
-        conn_string = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{db_name}'
-        return conn_string
     
     def create_tables(self):
-        # self.__logger("creating all tables")
+        self.__logger("creating all tables")
         Base.metadata.create_all(self.__engine)
 
     def __execute_stmt(self, stmt):
@@ -47,5 +42,5 @@ class DatabaseInteractor:
 
         else:
             raise ValueError(conflict_mode)    
-        self.__execute_stmt(insert_stmt)
+        self.__execute_stmt(conflict_stmt)
         self.__logger.info("Commited changes to database.")
