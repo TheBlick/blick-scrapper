@@ -1,6 +1,4 @@
 import requests
-import json
-
 
 class GoogleSearch:
     def __init__(self, logger, api_key, cse_id):

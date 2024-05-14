@@ -1,7 +1,5 @@
 import re
 
-from misc.utils import strip_non_numeric
-
 from targets.greenhouse.greenhouse_job_board_parser import GreenhouseBoardParser
 from targets.greenhouse.models import JobPosting, JobPostingFromBoard
 from targets.greenhouse.constants import *
